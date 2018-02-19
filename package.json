@@ -15,8 +15,19 @@
   },
   "private": false,
   "dependencies": {
+    "@angular/animations": "^5.2.4",
+    "@angular/common": "^5.2.4",
+    "@angular/compiler": "^5.2.4",
+    "@angular/core": "^5.2.4",
+    "@angular/forms": "^5.2.4",
+    "@angular/material": "^5.2.1",
+    "@angular/material-moment-adapter": "^5.2.1",
+    "@angular/platform-browser": "^5.2.4",
+    "@angular/platform-browser-dynamic": "^5.2.4",
+    "zone.js": "^0.8.20"
   },
   "devDependencies": {
+    "@angular/cdk": "^5.2.1",
     "@angular/cli": "1.6.7",
     "@angular/compiler-cli": "^5.0.0",
     "@angular/language-service": "^5.0.0",

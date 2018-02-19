@@ -130,7 +130,7 @@ export class MatCalendar<D> implements AfterContentInit, OnDestroy, OnChanges {
   @Output() _userSelection = new EventEmitter<void>();
 
   /** Emits when new pair of dates selected. */
-  @Output() dateRangesChange = new EventEmitter<MatDatePickerRangeValue<D>>();
+  @Output() dateRangesChange = new EventEmitter<D>();
 
   /** Reference to the current month view component. */
   @ViewChild(MatMonthView) monthView: MatMonthView<D>;
@@ -248,20 +248,7 @@ export class MatCalendar<D> implements AfterContentInit, OnDestroy, OnChanges {
   /** Handles date selection in the month view. */
   _dateSelected(date: D): void {
     if (this.rangeMode) {
-      if (!this._dateAdapter.sameDate(this.beginDate, date) ||
-          !this._dateAdapter.sameDate(this.endDate, date)) {
-        if (!this._beginDateSelected) {
-          this._beginDateSelected = true;
-          this.dateRangesChange.emit({begin: date, end: date});
-        } else {
-          this._beginDateSelected = false;
-          if (this._dateAdapter.compareDate(<D>this.beginDate, date) <= 0) {
-            this.dateRangesChange.emit({begin: <D>this.beginDate, end: date});
-          } else {
-            this.dateRangesChange.emit({begin: date, end: <D>this.beginDate});
-          }
-        }
-      }
+      this.dateRangesChange.emit(date);
     } else if (!this._dateAdapter.sameDate(date, this.selected)) {
       this.selectedChange.emit(date);
     }

@@ -1,2 +1,27 @@
-<input [matDatepicker]="myDatepicker">
+<input matInput [matDatepicker]="myDatepicker">
 <mat-datepicker #myDatepicker [rangeMode]="true"></mat-datepicker>
+
+
+<br>
+<br>
+
+<mat-form-field class="example-full-width">
+  <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+  <mat-datepicker-toggle matSuffix [for]="picker">
+    1
+  </mat-datepicker-toggle>
+  <mat-datepicker #picker [rangeMode]="true"></mat-datepicker>
+</mat-form-field>
+
+<br>
+<br>
+
+<form class="example-form">
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Favorite food" value="Sushi">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <textarea matInput placeholder="Leave a comment"></textarea>
+  </mat-form-field>
+</form>

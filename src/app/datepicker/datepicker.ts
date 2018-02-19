@@ -259,6 +259,8 @@ export class MatDatepicker<D> implements OnDestroy {
   /** The input element this datepicker is associated with. */
   _datepickerInput: MatDatepickerInput<D>;
 
+  _beginDateSelected = false;
+
   /** Emits when the datepicker is disabled. */
   _disabledChange = new Subject<boolean>();
 
@@ -295,11 +297,26 @@ export class MatDatepicker<D> implements OnDestroy {
   }
 
   /** Selects the given date range */
-  _selectRange(dates: MatDatePickerRangeValue<D>): void {
-    if (!this._dateAdapter.sameDate(dates.begin, this.beginDate) ||
-        !this._dateAdapter.sameDate(dates.end, this.endDate)) {
-      this.selectedChanged.emit(dates);
+  _selectRange(date: D): void {
+    if (!this._dateAdapter.sameDate(this.beginDate, date) ||
+      !this._dateAdapter.sameDate(this.endDate, date)) {
+      if (!this._beginDateSelected) {
+        this._beginDateSelected = true;
+        this._setDateRange({begin: date, end: date});
+      } else {
+        this._beginDateSelected = false;
+        if (this._dateAdapter.compareDate(<D>this.beginDate, date) <= 0) {
+          this._setDateRange({begin: <D>this.beginDate, end: date});
+        } else {
+          this._setDateRange({begin: date, end: <D>this.beginDate});
+        }
+      }
     }
+
+    this.selectedChanged.emit({begin: this._beginDate, end: this._endDate});
+  }
+
+  private _setDateRange(dates: { begin: D, end: D }) {
     this._beginDate = dates.begin;
     this._endDate = dates.end;
   }

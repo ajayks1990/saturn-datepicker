@@ -119,7 +119,8 @@ export class MatMonthView<D> implements AfterContentInit {
   _rangeFull: boolean | null = false;
 
   /** Whenever user already selected start of dates interval. */
-  private _beginDateSelected = false;
+  // @Input()
+  // private _beginDateSelected = false;
 
   /** The date of the month that today falls on. Null if today is in another month. */
   _todayDate: number | null;
@@ -164,14 +165,15 @@ export class MatMonthView<D> implements AfterContentInit {
   _dateSelected(date: number) {
     const selectedDate = this._getDateInstanceFromSelectedDate(date);
     if (this.rangeMode) {
-      if (!this._beginDateSelected) { // At first click emit the same start and end of interval
-        this._beginDateSelected = true;
-        this.selectedChange.emit(selectedDate);
-      } else {
-        this._beginDateSelected = false;
-        this.selectedChange.emit(selectedDate);
-        this._userSelection.emit();
-      }
+      this.selectedChange.emit(selectedDate);
+      // if (!this._beginDateSelected) { // At first click emit the same start and end of interval
+      //   this._beginDateSelected = true;
+      //
+      // } else {
+      //   this._beginDateSelected = false;
+      //   this.selectedChange.emit(selectedDate);
+      //   this._userSelection.emit();
+      // }
     } else if (this._selectedDate != date) {
       this.selectedChange.emit(selectedDate);
       this._userSelection.emit();
