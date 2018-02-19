@@ -1,0 +1,28 @@
+<div style="border: 1px solid #000">
+  <table>
+    <tr>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Comparison period">
+        </mat-form-field>
+        <mat-calendar [rangeMode]="true"
+                      [startAt]="start"
+                      [beginDate]="_beginDate"
+                      [endDate]="_endDate"
+                      (dateRangesChange)="_selectRange($event)">
+        </mat-calendar>
+      </td>
+      <td>
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Collection period">
+        </mat-form-field>
+        <mat-calendar [rangeMode]="true"
+                      [startAt]="start"
+                      [beginDate]="_beginDate"
+                      [endDate]="_endDate"
+                      (dateRangesChange)="_selectRange($event)">
+        </mat-calendar>
+      </td>
+    </tr>
+  </table>
+</div>

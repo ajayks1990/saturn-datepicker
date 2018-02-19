@@ -365,6 +365,7 @@ export class MatDatepicker<D> implements OnDestroy {
     }
 
     this.touchUi ? this._openAsDialog() : this._openAsPopup();
+
     this._opened = true;
     this.openedStream.emit();
   }
