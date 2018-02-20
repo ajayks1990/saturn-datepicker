@@ -5,6 +5,15 @@
         <mat-form-field>
           <input matInput placeholder="Comparison period" (focus)="_setRangeType()">
         </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Collection period" (focus)="_setRangeType(true)">
+        </mat-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>
         <mat-calendar [rangeMode]="true"
                       [startAt]="start"
                       [beginDate]="_beginDate"
@@ -15,9 +24,6 @@
         </mat-calendar>
       </td>
       <td>
-        <mat-form-field class="example-full-width">
-          <input matInput placeholder="Collection period" (focus)="_setRangeType(true)">
-        </mat-form-field>
         <mat-calendar [rangeMode]="true"
                       [startAt]="start"
                       [beginDate]="_beginDate"

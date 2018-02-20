@@ -35,7 +35,6 @@
 .mat-calendar-body-end-collection-range:not(.mat-calendar-body-begin-collection-range) {
   border-radius: 0 100% 100% 0;
   background-color: #e5e5e5;
-  /*border-radius: 2px solid #e5e5e5;*/
 }
 
 .mat-calendar-body-collection-selected {
