@@ -64,7 +64,7 @@ export class MatMonthView<D> implements AfterContentInit {
   }
   private _selected: D | null;
 
- /** Current start of interval. */
+  /** Current start of interval. */
   @Input()
   get beginDate(): D | null { return this._beginDate; }
   set beginDate(value: D | null) {
@@ -73,7 +73,7 @@ export class MatMonthView<D> implements AfterContentInit {
   }
   private _beginDate: D | null;
 
- /** Current end of interval. */
+  /** Current end of interval. */
   @Input()
   get endDate(): D | null { return this._endDate; }
   set endDate(value: D | null) {
@@ -81,6 +81,24 @@ export class MatMonthView<D> implements AfterContentInit {
     this.updateRangeSpecificValues();
   }
   private _endDate: D | null;
+
+  /** Current start of interval. */
+  @Input()
+  get beginCollDate(): D | null { return this._beginCollDate; }
+  set beginCollDate(value: D | null) {
+    this._beginCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
+    this.updateCollRangeSpecificValues();
+  }
+  private _beginCollDate: D | null;
+
+  /** Current end of interval. */
+  @Input()
+  get endCollDate(): D | null { return this._endCollDate; }
+  set endCollDate(value: D | null) {
+    this._endCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
+    this.updateCollRangeSpecificValues();
+  }
+  private _endCollDate: D | null;
 
   /** Allow selecting range of dates. */
   @Input() rangeMode = false;
@@ -114,6 +132,9 @@ export class MatMonthView<D> implements AfterContentInit {
 
   /* Last day of interval. */
   _endDateNumber: number | null;
+
+  _beginCollDateNumber: number | null;
+  _endCollDateNumber: number | null;
 
   /** Whenever full month is inside dates interval. */
   _rangeFull: boolean | null = false;
@@ -183,6 +204,7 @@ export class MatMonthView<D> implements AfterContentInit {
   /** Initializes this month view. */
   _init() {
     this.updateRangeSpecificValues();
+    this.updateCollRangeSpecificValues();
     this._selectedDate = this._getDateInCurrentMonth(this.selected);
     this._todayDate = this._getDateInCurrentMonth(this._dateAdapter.today());
     this._monthLabel =
@@ -248,14 +270,28 @@ export class MatMonthView<D> implements AfterContentInit {
    */
   private updateRangeSpecificValues(): void {
     if (this.rangeMode) {
-    this._beginDateNumber = this._getDateInCurrentMonth(this._beginDate);
+      this._beginDateNumber = this._getDateInCurrentMonth(this._beginDate);
       this._endDateNumber = this._getDateInCurrentMonth(this._endDate);
       this._rangeFull = this.beginDate && this.endDate && !this._beginDateNumber &&
-          !this._endDateNumber &&
-          this._dateAdapter.compareDate(this.beginDate, this.activeDate) <= 0 &&
-          this._dateAdapter.compareDate(this.activeDate, this.endDate) <= 0;
+        !this._endDateNumber &&
+        this._dateAdapter.compareDate(this.beginDate, this.activeDate) <= 0 &&
+        this._dateAdapter.compareDate(this.activeDate, this.endDate) <= 0;
     } else {
       this._beginDateNumber = this._endDateNumber = null;
+      this._rangeFull = false;
+    }
+  }
+
+  private updateCollRangeSpecificValues(): void {
+    if (this.rangeMode) {
+      this._beginCollDateNumber = this._getDateInCurrentMonth(this._beginCollDate);
+      this._endCollDateNumber = this._getDateInCurrentMonth(this._endCollDate);
+      this._rangeFull = this.beginDate && this.endDate && !this._beginCollDateNumber &&
+        !this._endCollDateNumber &&
+        this._dateAdapter.compareDate(this.beginCollDate, this.activeDate) <= 0 &&
+        this._dateAdapter.compareDate(this.activeDate, this.endCollDate) <= 0;
+    } else {
+      this._beginCollDateNumber = this._endCollDateNumber = null;
       this._rangeFull = false;
     }
   }

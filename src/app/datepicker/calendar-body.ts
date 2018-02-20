@@ -70,6 +70,10 @@ export class MatCalendarBody {
    */
   @Input() end: number|null;
 
+  @Input() collectionRange = false;
+  @Input() collectionBegin: number|null;
+  @Input() collectionEnd: number|null;
+
   /** Whether to mark all dates as semi-selected. */
   @Input() rangeFull: boolean;
 
@@ -134,11 +138,32 @@ export class MatCalendarBody {
       return false;
     }
     if (this.begin && !this.end) {
-        return date > this.begin;
+      return date > this.begin;
     }
     if (this.end && !this.begin) {
       return date < this.end;
     }
     return date > <number>this.begin && date < <number>this.end;
+  }
+
+  /** Whenever to mark cell as semi-selected (inside dates interval). */
+  _isSemiCollectionSelected(date: number) {
+    if (!this.rangeMode) {
+      return false;
+    }
+    if (this.rangeFull) {
+      return true;
+    }
+    /** Do not mark start and end of interval. */
+    if (date === this.collectionBegin || date === this.collectionEnd) {
+      return false;
+    }
+    if (this.collectionBegin && !this.collectionEnd) {
+      return date > this.collectionBegin;
+    }
+    if (this.collectionEnd && !this.collectionBegin) {
+      return date < this.collectionEnd;
+    }
+    return date > <number>this.collectionBegin && date < <number>this.collectionEnd;
   }
 }

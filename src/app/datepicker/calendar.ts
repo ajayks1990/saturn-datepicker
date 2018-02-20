@@ -117,6 +117,26 @@ export class MatCalendar<D> implements AfterContentInit, OnDestroy, OnChanges {
   }
   private _endDate: D | null;
 
+
+
+  /** Beginning of date range. */
+  @Input()
+  get beginCollDate(): D | null { return this._beginCollDate; }
+  set beginCollDate(value: D | null) {
+    this._beginCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
+  }
+  private _beginCollDate: D | null;
+
+  /** Date range end. */
+  @Input()
+  get endCollDate(): D | null { return this._endCollDate; }
+  set endCollDate(value: D | null) {
+    this._endCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
+  }
+  private _endCollDate: D | null;
+
+
+
   /** Whenever datepicker is for selecting range of dates. */
   @Input() rangeMode = false;
 
@@ -150,7 +170,7 @@ export class MatCalendar<D> implements AfterContentInit, OnDestroy, OnChanges {
         (!this.dateFilter || this.dateFilter(date)) &&
         (!this.minDate || this._dateAdapter.compareDate(date, this.minDate) >= 0) &&
         (!this.maxDate || this._dateAdapter.compareDate(date, this.maxDate) <= 0);
-  }
+  };
 
   /**
    * The current active date. This determines which time period is shown and which date is

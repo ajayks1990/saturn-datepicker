@@ -3,23 +3,27 @@
     <tr>
       <td>
         <mat-form-field>
-          <input matInput placeholder="Comparison period">
+          <input matInput placeholder="Comparison period" (focus)="_setRangeType()">
         </mat-form-field>
         <mat-calendar [rangeMode]="true"
                       [startAt]="start"
                       [beginDate]="_beginDate"
                       [endDate]="_endDate"
+                      [beginCollDate]="_beginCollDate"
+                      [endCollDate]="_endCollDate"
                       (dateRangesChange)="_selectRange($event)">
         </mat-calendar>
       </td>
       <td>
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Collection period">
+          <input matInput placeholder="Collection period" (focus)="_setRangeType(true)">
         </mat-form-field>
         <mat-calendar [rangeMode]="true"
                       [startAt]="start"
                       [beginDate]="_beginDate"
                       [endDate]="_endDate"
+                      [beginCollDate]="_beginCollDate"
+                      [endCollDate]="_endCollDate"
                       (dateRangesChange)="_selectRange($event)">
         </mat-calendar>
       </td>

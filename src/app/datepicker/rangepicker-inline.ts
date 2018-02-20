@@ -37,7 +37,7 @@ export class MatRangepickerInline<D> {
     if (this.rangeMode) {
       this._validSelected = null;
     } else {
-      this._beginDate = this._endDate = null;
+      this._beginDate = this._endDate = this._beginCollDate = this._endCollDate = null;
     }
   }
   private _rangeMode;
@@ -74,34 +74,83 @@ export class MatRangepickerInline<D> {
   }
   private _validSelected: D | null = null;
 
+  /** Start of dates interval. */
+  @Input()
+  get beginCollDate(): D | null { return this._beginCollDate; }
+  set beginCollDate(value: D | null) {
+    this._validSelected = null;
+    this._beginCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
+  }
+  _beginCollDate: D | null;
+
+  /** End of dates interval. */
+  @Input()
+  get endCollDate(): D | null { return this._endCollDate; }
+  set endCollDate(value: D | null) {
+    this._validSelected = null;
+    this._endCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
+  }
+  _endCollDate: D | null;
+
   _beginDateSelected = false;
+  _beginCollDateSelected = false;
+  _collSelectingMode = false;
 
   constructor(@Optional() private _dateAdapter: DateAdapter<D>) {
   }
 
+  _setRangeType(collection = false) {
+    this._collSelectingMode = collection;
+  }
+
   /** Selects the given date range */
   _selectRange(date: D): void {
+    this._collSelectingMode ? this._selectCollRange(date) : this._selectCompRange(date);
+    this.selectedChanged.emit({begin: this._beginDate, end: this._endDate});
+  }
+
+  private _selectCompRange(date: D): void {
     if (!this._dateAdapter.sameDate(this.beginDate, date) ||
       !this._dateAdapter.sameDate(this.endDate, date)) {
       if (!this._beginDateSelected) {
         this._beginDateSelected = true;
-        this._setDateRange({begin: date, end: date});
+        this._setCompDateRange({begin: date, end: date});
       } else {
         this._beginDateSelected = false;
         if (this._dateAdapter.compareDate(<D>this.beginDate, date) <= 0) {
-          this._setDateRange({begin: <D>this.beginDate, end: date});
+          this._setCompDateRange({begin: <D>this.beginDate, end: date});
         } else {
-          this._setDateRange({begin: date, end: <D>this.beginDate});
+          this._setCompDateRange({begin: date, end: <D>this.beginDate});
         }
       }
     }
-
-    this.selectedChanged.emit({begin: this._beginDate, end: this._endDate});
   }
 
-  private _setDateRange(dates: { begin: D, end: D }) {
+  private _selectCollRange(date: D): void {
+    if (!this._dateAdapter.sameDate(this.beginCollDate, date) ||
+      !this._dateAdapter.sameDate(this.endCollDate, date)) {
+      if (!this._beginCollDateSelected) {
+        this._beginCollDateSelected = true;
+        this._setCollDateRange({begin: date, end: date});
+      } else {
+        this._beginCollDateSelected = false;
+        if (this._dateAdapter.compareDate(<D>this.beginCollDate, date) <= 0) {
+          this._setCollDateRange({begin: <D>this.beginCollDate, end: date});
+        } else {
+          this._setCollDateRange({begin: date, end: <D>this.beginCollDate});
+        }
+      }
+    }
+  }
+
+  private _setCompDateRange(dates: { begin: D, end: D }) {
     this._beginDate = dates.begin;
     this._endDate = dates.end;
+  }
+
+  private _setCollDateRange(dates: { begin: D, end: D }) {
+    this._beginCollDate = dates.begin;
+    this._endCollDate = dates.end;
   }
 
   /**
