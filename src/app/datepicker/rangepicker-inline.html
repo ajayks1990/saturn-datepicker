@@ -2,35 +2,40 @@
   <table>
     <tr>
       <td>
-        <mat-form-field>
-          <input matInput placeholder="Comparison period" (focus)="_setRangeType()">
-        </mat-form-field>
+        <mat-input-container [class.active]="_collSelectingMode" class="active comp">
+          <input matInput placeholder="Comparison period" [ngModel]="collectionModel" (focus)="_setRangeType(true)">
+        </mat-input-container>
       </td>
       <td>
-        <mat-form-field>
-          <input matInput placeholder="Collection period" (focus)="_setRangeType(true)">
-        </mat-form-field>
+        <mat-input-container class="coll" [class.active]="!_collSelectingMode">
+          <input matInput placeholder="Collection period" [ngModel]="comparisonModel" (focus)="_setRangeType()">
+        </mat-input-container>
       </td>
     </tr>
     <tr>
       <td>
-        <mat-calendar [rangeMode]="true"
-                      [startAt]="start"
+        <mat-calendar #leftCalendar
+                      [rangeMode]="true"
+                      [startAt]="_startAt"
                       [beginDate]="_beginDate"
                       [endDate]="_endDate"
                       [beginCollDate]="_beginCollDate"
                       [endCollDate]="_endCollDate"
-                      (dateRangesChange)="_selectRange($event)">
+                      (selectMonthView)="rightCalendar.setActiveNextMonth($event)"
+                      (dateRangesChange)="_selectRange($event)"
+                      mode="left">
         </mat-calendar>
       </td>
       <td>
-        <mat-calendar [rangeMode]="true"
-                      [startAt]="start"
+        <mat-calendar #rightCalendar
+                      [rangeMode]="true"
                       [beginDate]="_beginDate"
                       [endDate]="_endDate"
                       [beginCollDate]="_beginCollDate"
                       [endCollDate]="_endCollDate"
-                      (dateRangesChange)="_selectRange($event)">
+                      (selectMonthView)="leftCalendar.setActivePreviousMonth($event)"
+                      (dateRangesChange)="_selectRange($event)"
+                      mode="right">
         </mat-calendar>
       </td>
     </tr>

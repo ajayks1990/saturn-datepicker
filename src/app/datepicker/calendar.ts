@@ -18,7 +18,7 @@ import {
   UP_ARROW,
 } from '@angular/cdk/keycodes';
 import {
-  AfterContentInit,
+  AfterContentInit, Attribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -34,7 +34,7 @@ import {
   SimpleChanges,
   ViewChild,
   ViewEncapsulation,
-} from '@angular/core';
+} from "@angular/core";
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from '@angular/material/core';
 import {take} from 'rxjs/operators/take';
 import {Subscription} from 'rxjs/Subscription';
@@ -43,7 +43,6 @@ import {MatDatepickerIntl} from './datepicker-intl';
 import {MatMonthView} from './month-view';
 import {MatMultiYearView, yearsPerPage, yearsPerRow} from './multi-year-view';
 import {MatYearView} from './year-view';
-import {MatDatePickerRangeValue} from './datepicker-input';
 
 
 /**
@@ -61,7 +60,7 @@ import {MatDatePickerRangeValue} from './datepicker-input';
   exportAs: 'matCalendar',
   encapsulation: ViewEncapsulation.None,
   preserveWhitespaces: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class MatCalendar<D> implements AfterContentInit, OnDestroy, OnChanges {
   private _intlChanges: Subscription;
@@ -179,8 +178,22 @@ export class MatCalendar<D> implements AfterContentInit, OnDestroy, OnChanges {
   get _activeDate(): D { return this._clampedActiveDate; }
   set _activeDate(value: D) {
     this._clampedActiveDate = this._dateAdapter.clampDate(value, this.minDate, this.maxDate);
+    this.selectMonthView.emit(value);
   }
   private _clampedActiveDate: D;
+
+  public setActiveNextMonth(date: D): void {
+    const nextMonth = this._dateAdapter.addCalendarMonths(date, 1);
+    this._clampedActiveDate = this._dateAdapter.clampDate(nextMonth, this.minDate, this.maxDate);
+
+  }
+
+  public setActivePreviousMonth(date: D): void {
+    const nextMonth = this._dateAdapter.addCalendarMonths(date, -1);
+    this._clampedActiveDate = this._dateAdapter.clampDate(nextMonth, this.minDate, this.maxDate);
+    // TODO : remove console.log
+    console.log(this._clampedActiveDate, this.mode);
+  }
 
   /** Whether the calendar is in month view. */
   _currentView: 'month' | 'year' | 'multi-year';
@@ -225,12 +238,17 @@ export class MatCalendar<D> implements AfterContentInit, OnDestroy, OnChanges {
     }[this._currentView];
   }
 
+  @Output()
+  public selectMonthView = new EventEmitter<D>();
+
   constructor(private _elementRef: ElementRef,
               private _intl: MatDatepickerIntl,
               private _ngZone: NgZone,
+              @Attribute('mode') public mode: 'left' | 'right',
               @Optional() private _dateAdapter: DateAdapter<D>,
               @Optional() @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats,
-              changeDetectorRef: ChangeDetectorRef) {
+              changeDetectorRef: ChangeDetectorRef,
+              private zone: NgZone) {
 
     if (!this._dateAdapter) {
       throw createMissingDateImplError('DateAdapter');

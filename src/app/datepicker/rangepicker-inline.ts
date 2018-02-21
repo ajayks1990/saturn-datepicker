@@ -1,12 +1,14 @@
-import { Component, EventEmitter, Input, Optional, Output } from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, NgZone, Optional, Output} from "@angular/core";
 import { MatDatePickerRangeValue } from './datepicker-input';
-import { DateAdapter } from '@angular/material/core';
+import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
+
 
 @Component({
   selector: 'mat-rangepicker-inline',
   exportAs: 'mat-rangepicker-inline',
   templateUrl: './rangepicker-inline.html',
-  styleUrls: ['./rangepicker-inline.css']
+  styleUrls: ['./rangepicker-inline.css', './rangepicker.inline.css'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class MatRangepickerInline<D> {
 
@@ -19,8 +21,8 @@ export class MatRangepickerInline<D> {
     //   return this._startAt || (this._datepickerInput && this._datepickerInput.value ?
     //     (<MatDatePickerRangeValue<D>>this._datepickerInput.value).begin : null);
     // }
-    // return this._startAt || (this._datepickerInput ? <D|null>this._datepickerInput.value : null);
-    return null;
+    // || (this._datepickerInput ? <D|null>this._datepickerInput.value : null)
+    return this._startAt;
   }
   set startAt(date: D | null) {
     this._startAt = this._getValidDateOrNull(this._dateAdapter.deserialize(date));
@@ -48,12 +50,16 @@ export class MatRangepickerInline<D> {
    */
   @Output() selectedChanged = new EventEmitter<MatDatePickerRangeValue<D>|D>();
 
+  @Output() selectedComparisonChanged = new EventEmitter<MatDatePickerRangeValue<D>|D>();
+  @Output() selectedCollectionChanged = new EventEmitter<MatDatePickerRangeValue<D>|D>();
+
   /** Start of dates interval. */
   @Input()
   get beginDate(): D | null { return this._beginDate; }
   set beginDate(value: D | null) {
     this._validSelected = null;
     this._beginDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
+    this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
   }
   _beginDate: D | null;
 
@@ -63,6 +69,7 @@ export class MatRangepickerInline<D> {
   set endDate(value: D | null) {
     this._validSelected = null;
     this._endDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
+    this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
   }
   _endDate: D | null;
 
@@ -80,6 +87,7 @@ export class MatRangepickerInline<D> {
   set beginCollDate(value: D | null) {
     this._validSelected = null;
     this._beginCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
+    this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
   }
   _beginCollDate: D | null;
 
@@ -89,24 +97,51 @@ export class MatRangepickerInline<D> {
   set endCollDate(value: D | null) {
     this._validSelected = null;
     this._endCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
+    this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
   }
   _endCollDate: D | null;
 
   _beginDateSelected = false;
   _beginCollDateSelected = false;
-  _collSelectingMode = false;
+  _collSelectingMode = true;
 
-  constructor(@Optional() private _dateAdapter: DateAdapter<D>) {
+  constructor(@Optional() private _dateAdapter: DateAdapter<D>,
+              @Optional() @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats,
+              public zone: NgZone) {}
+
+  _setRangeType(mode = false) {
+    this._collSelectingMode = mode;
   }
 
-  _setRangeType(collection = false) {
-    this._collSelectingMode = collection;
-  }
+  public comparisonModel: string = '';
+  public collectionModel: string = '';
 
   /** Selects the given date range */
   _selectRange(date: D): void {
-    this._collSelectingMode ? this._selectCollRange(date) : this._selectCompRange(date);
+    if (this._collSelectingMode) {
+      this._selectCollRange(date);
+      if (!this._beginCollDateSelected) {
+        this.selectedCollectionChanged.emit({begin: this._beginCollDate, end: this.endCollDate});
+        this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
+      }
+
+    } else {
+      this._selectCompRange(date);
+      if (!this._beginDateSelected) {
+        this.selectedCollectionChanged.emit({begin: this._beginDate, end: this._endDate});
+        this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
+      }
+    }
     this.selectedChanged.emit({begin: this._beginDate, end: this._endDate});
+  }
+
+  public prepareFormat(begin: D, end: D): string {
+    if (this._getValidDateOrNull(begin) && this._getValidDateOrNull(end)) {
+      const date1 = this._dateAdapter.format(begin, this._dateFormats.display.dateInput);
+      const date2 = this._dateAdapter.format(end, this._dateFormats.display.dateInput);
+      return `${date1} - ${date2}`;
+    }
+    return '';
   }
 
   private _selectCompRange(date: D): void {

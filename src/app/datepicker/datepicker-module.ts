@@ -26,14 +26,16 @@ import {MatDatepickerToggle} from './datepicker-toggle';
 import {MatMonthView} from './month-view';
 import {MatMultiYearView} from './multi-year-view';
 import {MatYearView} from './year-view';
-import {MatRangepickerInline} from "./rangepicker-inline";
-import {MatInputModule} from "@angular/material";
+import {MatRangepickerInline} from './rangepicker-inline';
+import {MatInputModule} from '@angular/material';
+import {FormsModule} from '@angular/forms';
 
 
 @NgModule({
   imports: [
     CommonModule,
     MatButtonModule,
+    FormsModule,
     MatInputModule,
     MatDialogModule,
     MatIconModule,

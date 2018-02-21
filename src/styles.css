@@ -43,7 +43,7 @@
 }
 
 .mat-calendar-cell-semi-collection-selected {
-  background-color: #e5e5e5;
+  background-color: #e5e5e5 !important;
 }
 
 .mat-calendar-body > tr .mat-calendar-cell-semi-selected ~ .mat-calendar-cell-semi-selected,
