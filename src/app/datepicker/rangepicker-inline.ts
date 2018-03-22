@@ -27,7 +27,7 @@ export class MatRangepickerInline<D> {
   set startAt(date: D | null) {
     this._startAt = this._getValidDateOrNull(this._dateAdapter.deserialize(date));
   }
-  private _startAt: D | null;
+  _startAt: D | null;
 
   /** Whenever datepicker is for selecting range of dates. */
   @Input()
