@@ -244,7 +244,7 @@ export class MatCalendar<D> implements AfterContentInit, OnDestroy, OnChanges {
   constructor(private _elementRef: ElementRef,
               private _intl: MatDatepickerIntl,
               private _ngZone: NgZone,
-              @Attribute('mode') public mode: 'left' | 'right',
+              @Attribute('mode') public mode: string,
               @Optional() private _dateAdapter: DateAdapter<D>,
               @Optional() @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats,
               changeDetectorRef: ChangeDetectorRef,
