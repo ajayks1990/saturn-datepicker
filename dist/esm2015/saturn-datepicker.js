@@ -1229,8 +1229,6 @@ class MatCalendar {
     setActivePreviousMonth(date) {
         const /** @type {?} */ nextMonth = this._dateAdapter.addCalendarMonths(date, -1);
         this._clampedActiveDate = this._dateAdapter.clampDate(nextMonth, this.minDate, this.maxDate);
-        // TODO : remove console.log
-        console.log(this._clampedActiveDate, this.mode);
     }
     /**
      * The label for the current calendar view.
@@ -2997,7 +2995,7 @@ class MatRangepickerInline {
         if (this._collSelectingMode) {
             this._selectCollRange(date);
             if (!this._beginCollDateSelected) {
-                this.selectedCollectionChanged.emit({ begin: this._beginCollDate, end: this.endCollDate });
+                this.selectedComparisonChanged.emit({ begin: this._beginCollDate, end: this.endCollDate });
                 this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
             }
         }
@@ -3095,7 +3093,7 @@ MatRangepickerInline.decorators = [
     { type: Component, args: [{
                 selector: 'mat-rangepicker-inline',
                 exportAs: 'mat-rangepicker-inline',
-                template: `<div style="border: 1px solid #000">
+                template: `<div>
   <table>
     <tr>
       <td>

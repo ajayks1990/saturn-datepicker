@@ -121,10 +121,9 @@ export class MatRangepickerInline<D> {
     if (this._collSelectingMode) {
       this._selectCollRange(date);
       if (!this._beginCollDateSelected) {
-        this.selectedCollectionChanged.emit({begin: this._beginCollDate, end: this.endCollDate});
+        this.selectedComparisonChanged.emit({begin: this._beginCollDate, end: this.endCollDate});
         this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
       }
-
     } else {
       this._selectCompRange(date);
       if (!this._beginDateSelected) {

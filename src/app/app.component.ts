@@ -11,4 +11,8 @@ export class AppComponent {
 
   constructor() {
   }
+
+  test(e, i) {
+    console.log(e, i);
+  }
 }

@@ -1,4 +1,7 @@
-<mat-rangepicker-inline [beginCollDate]="date2" [endCollDate]="date1"></mat-rangepicker-inline>
+<mat-rangepicker-inline [beginCollDate]="date2"
+                        [endCollDate]="date1"
+                        (selectedCollectionChanged)="test($event, 1)"
+                        (selectedComparisonChanged)="test($event, 0)"></mat-rangepicker-inline>
 <br>
 <br>
 <input matInput [matDatepicker]="myDatepicker">

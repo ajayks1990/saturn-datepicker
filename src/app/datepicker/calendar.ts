@@ -191,8 +191,6 @@ export class MatCalendar<D> implements AfterContentInit, OnDestroy, OnChanges {
   public setActivePreviousMonth(date: D): void {
     const nextMonth = this._dateAdapter.addCalendarMonths(date, -1);
     this._clampedActiveDate = this._dateAdapter.clampDate(nextMonth, this.minDate, this.maxDate);
-    // TODO : remove console.log
-    console.log(this._clampedActiveDate, this.mode);
   }
 
   /** Whether the calendar is in month view. */
