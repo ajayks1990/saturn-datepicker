@@ -1,11 +1,13 @@
-# Double calendar with double daterange Saturn datepicker
+# double-saturn-datepicker
+Fork and modify Saturn datepicker.
+Double calendar with double daterange.
 ## install
 ```
-npm i github:dluhhbiu/saturn-datepicker#master --save
+npm i double-saturn-datepicker --save
 ```
 
 ```
-import { MatDatepickerModule } from 'saturn-datepicker/dist';
+import { MatDatepickerModule } from 'double-saturn-datepicker';
 ```
 
 ```
