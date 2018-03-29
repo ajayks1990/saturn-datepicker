@@ -2062,8 +2062,8 @@ exports.MatDatepickerIntl = MatDatepickerIntl;
 exports.MatDatepickerToggle = MatDatepickerToggle;
 exports.MatMonthView = MatMonthView;
 exports.MatYearView = MatYearView;
+exports.MatRangepickerInline = MatRangepickerInline;
 exports.ɵa = MatMultiYearView;
-exports.ɵb = MatRangepickerInline;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

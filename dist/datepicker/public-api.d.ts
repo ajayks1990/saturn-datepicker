@@ -14,3 +14,4 @@ export * from './datepicker-intl';
 export * from './datepicker-toggle';
 export * from './month-view';
 export * from './year-view';
+export * from './rangepicker-inline';
