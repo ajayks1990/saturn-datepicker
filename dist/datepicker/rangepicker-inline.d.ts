@@ -5,6 +5,7 @@ export declare class MatRangepickerInline<D> {
     private _dateAdapter;
     private _dateFormats;
     zone: NgZone;
+    rightCalendar: any;
     /** The date to open the calendar to initially. */
     startAt: D | null;
     _startAt: D | null;

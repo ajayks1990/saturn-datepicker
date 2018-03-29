@@ -1818,7 +1818,7 @@ var MatRangepickerInline = (function () {
         this._validSelected = null;
         this._beginDateSelected = false;
         this._beginCollDateSelected = false;
-        this._collSelectingMode = true;
+        this._collSelectingMode = false;
         this.comparisonModel = '';
         this.collectionModel = '';
     }
@@ -1853,7 +1853,7 @@ var MatRangepickerInline = (function () {
         set: function (value) {
             this._validSelected = null;
             this._beginDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-            this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
+            this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
         },
         enumerable: true,
         configurable: true
@@ -1863,7 +1863,7 @@ var MatRangepickerInline = (function () {
         set: function (value) {
             this._validSelected = null;
             this._endDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-            this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
+            this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
         },
         enumerable: true,
         configurable: true
@@ -1882,7 +1882,9 @@ var MatRangepickerInline = (function () {
         set: function (value) {
             this._validSelected = null;
             this._beginCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-            this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
+            this.collectionModel = this.prepareFormat(this._beginCollDate, this._endCollDate);
+            this.rightCalendar['startAt'] = this._beginCollDate;
+            this.rightCalendar['_activeDate'] = this._beginCollDate;
         },
         enumerable: true,
         configurable: true
@@ -1892,7 +1894,7 @@ var MatRangepickerInline = (function () {
         set: function (value) {
             this._validSelected = null;
             this._endCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-            this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
+            this.collectionModel = this.prepareFormat(this._beginCollDate, this._endCollDate);
         },
         enumerable: true,
         configurable: true
@@ -1905,14 +1907,14 @@ var MatRangepickerInline = (function () {
         if (this._collSelectingMode) {
             this._selectCollRange(date);
             if (!this._beginCollDateSelected) {
-                this.selectedComparisonChanged.emit({ begin: this._beginCollDate, end: this.endCollDate });
+                this.selectedCollectionChanged.emit({ begin: this._beginDate, end: this._endDate });
                 this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
             }
         }
         else {
             this._selectCompRange(date);
             if (!this._beginDateSelected) {
-                this.selectedCollectionChanged.emit({ begin: this._beginDate, end: this._endDate });
+                this.selectedComparisonChanged.emit({ begin: this._beginCollDate, end: this.endCollDate });
                 this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
             }
         }
@@ -1979,7 +1981,7 @@ MatRangepickerInline.decorators = [
     { type: Component, args: [{
                 selector: 'mat-rangepicker-inline',
                 exportAs: 'mat-rangepicker-inline',
-                template: "<div>\n  <table>\n    <tr>\n      <td>\n        <mat-input-container [class.active]=\"_collSelectingMode\" class=\"active comp\">\n          <input matInput placeholder=\"Comparison period\" [ngModel]=\"collectionModel\" (focus)=\"_setRangeType(true)\">\n        </mat-input-container>\n      </td>\n      <td>\n        <mat-input-container class=\"coll\" [class.active]=\"!_collSelectingMode\">\n          <input matInput placeholder=\"Collection period\" [ngModel]=\"comparisonModel\" (focus)=\"_setRangeType()\">\n        </mat-input-container>\n      </td>\n    </tr>\n    <tr>\n      <td>\n        <mat-calendar #leftCalendar\n                      [rangeMode]=\"true\"\n                      [startAt]=\"_startAt\"\n                      [beginDate]=\"_beginDate\"\n                      [endDate]=\"_endDate\"\n                      [beginCollDate]=\"_beginCollDate\"\n                      [endCollDate]=\"_endCollDate\"\n                      (selectMonthView)=\"rightCalendar.setActiveNextMonth($event)\"\n                      (dateRangesChange)=\"_selectRange($event)\"\n                      mode=\"left\">\n        </mat-calendar>\n      </td>\n      <td>\n        <mat-calendar #rightCalendar\n                      [rangeMode]=\"true\"\n                      [beginDate]=\"_beginDate\"\n                      [endDate]=\"_endDate\"\n                      [beginCollDate]=\"_beginCollDate\"\n                      [endCollDate]=\"_endCollDate\"\n                      (selectMonthView)=\"leftCalendar.setActivePreviousMonth($event)\"\n                      (dateRangesChange)=\"_selectRange($event)\"\n                      mode=\"right\">\n        </mat-calendar>\n      </td>\n    </tr>\n  </table>\n</div>\n",
+                template: "<div>\n  <table>\n    <tr>\n      <td>\n        <mat-input-container [class.active]=\"!_collSelectingMode\" class=\"active comp\">\n          <input matInput placeholder=\"Comparison period\" [ngModel]=\"comparisonModel\" (focus)=\"_setRangeType()\">\n        </mat-input-container>\n      </td>\n      <td>\n        <mat-input-container class=\"coll\" [class.active]=\"_collSelectingMode\">\n          <input matInput placeholder=\"Collection period\" [ngModel]=\"collectionModel\" (focus)=\"_setRangeType(true)\">\n        </mat-input-container>\n      </td>\n    </tr>\n    <tr>\n      <td>\n        <mat-calendar #leftCalendar\n                      [rangeMode]=\"true\"\n                      [startAt]=\"_startAt\"\n                      [beginDate]=\"_beginDate\"\n                      [endDate]=\"_endDate\"\n                      [beginCollDate]=\"_beginCollDate\"\n                      [endCollDate]=\"_endCollDate\"\n                      (selectMonthView)=\"rightCalendar.setActiveNextMonth($event)\"\n                      (dateRangesChange)=\"_selectRange($event)\"\n                      mode=\"left\">\n        </mat-calendar>\n      </td>\n      <td>\n        <mat-calendar #rightCalendar\n                      [rangeMode]=\"true\"\n                      [beginDate]=\"_beginDate\"\n                      [endDate]=\"_endDate\"\n                      [beginCollDate]=\"_beginCollDate\"\n                      [endCollDate]=\"_endCollDate\"\n                      (selectMonthView)=\"leftCalendar.setActivePreviousMonth($event)\"\n                      (dateRangesChange)=\"_selectRange($event)\"\n                      mode=\"right\">\n        </mat-calendar>\n      </td>\n    </tr>\n  </table>\n</div>\n",
                 styles: ["/deep/ :host{-webkit-box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12);box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12);display:block}/deep/ .mat-calendar{width:296px;height:354px}/deep/ .mat-datepicker-content-touch{-webkit-box-shadow:0 0 0 0 rgba(0,0,0,.2),0 0 0 0 rgba(0,0,0,.14),0 0 0 0 rgba(0,0,0,.12);box-shadow:0 0 0 0 rgba(0,0,0,.2),0 0 0 0 rgba(0,0,0,.14),0 0 0 0 rgba(0,0,0,.12);display:block;max-height:80vh;overflow:auto;margin:-24px}/deep/ .mat-datepicker-content-touch .mat-calendar{min-width:250px;min-height:312px;max-width:750px;max-height:788px}@media all and (orientation:landscape){/deep/ .mat-datepicker-content-touch .mat-calendar{width:64vh;height:80vh}}@media all and (orientation:portrait){/deep/ .mat-datepicker-content-touch .mat-calendar{width:80vw;height:100vw}}", "/deep/ mat-input-container{width:100%;padding:0 8px;-webkit-box-sizing:border-box;box-sizing:border-box}mat-input-container.coll.active /deep/ .mat-input-underline,mat-input-container.comp.active /deep/ .mat-input-underline{height:2px}mat-input-container.coll /deep/ .mat-input-underline{background-color:#3f54af}mat-input-container /deep/ .mat-form-field-label{color:rgba(0,0,0,.54)!important}mat-input-container.comp.active /deep/ .mat-input-ripple{display:none!important}"],
                 changeDetection: ChangeDetectionStrategy.Default
             },] },
@@ -1990,6 +1992,7 @@ MatRangepickerInline.ctorParameters = function () { return [
     { type: NgZone, },
 ]; };
 MatRangepickerInline.propDecorators = {
+    "rightCalendar": [{ type: ViewChild, args: ['rightCalendar',] },],
     "startAt": [{ type: Input },],
     "rangeMode": [{ type: Input },],
     "selectedChanged": [{ type: Output },],

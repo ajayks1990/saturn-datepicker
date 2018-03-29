@@ -1,4 +1,14 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, NgZone, Optional, Output} from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  NgZone,
+  Optional,
+  Output,
+  ViewChild
+} from "@angular/core";
 import { MatDatePickerRangeValue } from './datepicker-input';
 import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/core";
 
@@ -11,6 +21,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/c
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class MatRangepickerInline<D> {
+  @ViewChild('rightCalendar') rightCalendar;
 
   /** The date to open the calendar to initially. */
   @Input()
@@ -59,7 +70,7 @@ export class MatRangepickerInline<D> {
   set beginDate(value: D | null) {
     this._validSelected = null;
     this._beginDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-    this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
+    this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
   }
   _beginDate: D | null;
 
@@ -69,7 +80,7 @@ export class MatRangepickerInline<D> {
   set endDate(value: D | null) {
     this._validSelected = null;
     this._endDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-    this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
+    this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
   }
   _endDate: D | null;
 
@@ -87,7 +98,9 @@ export class MatRangepickerInline<D> {
   set beginCollDate(value: D | null) {
     this._validSelected = null;
     this._beginCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-    this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
+    this.collectionModel = this.prepareFormat(this._beginCollDate, this._endCollDate);
+    this.rightCalendar['startAt'] = this._beginCollDate;
+    this.rightCalendar['_activeDate'] = this._beginCollDate;
   }
   _beginCollDate: D | null;
 
@@ -97,13 +110,13 @@ export class MatRangepickerInline<D> {
   set endCollDate(value: D | null) {
     this._validSelected = null;
     this._endCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-    this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
+    this.collectionModel = this.prepareFormat(this._beginCollDate, this._endCollDate);
   }
   _endCollDate: D | null;
 
   _beginDateSelected = false;
   _beginCollDateSelected = false;
-  _collSelectingMode = true;
+  _collSelectingMode = false;
 
   constructor(@Optional() private _dateAdapter: DateAdapter<D>,
               @Optional() @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats,
@@ -121,13 +134,13 @@ export class MatRangepickerInline<D> {
     if (this._collSelectingMode) {
       this._selectCollRange(date);
       if (!this._beginCollDateSelected) {
-        this.selectedComparisonChanged.emit({begin: this._beginCollDate, end: this.endCollDate});
+        this.selectedCollectionChanged.emit({begin: this._beginDate, end: this._endDate});
         this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
       }
     } else {
       this._selectCompRange(date);
       if (!this._beginDateSelected) {
-        this.selectedCollectionChanged.emit({begin: this._beginDate, end: this._endDate});
+        this.selectedComparisonChanged.emit({begin: this._beginCollDate, end: this.endCollDate});
         this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
       }
     }

@@ -2,13 +2,13 @@
   <table>
     <tr>
       <td>
-        <mat-input-container [class.active]="_collSelectingMode" class="active comp">
-          <input matInput placeholder="Comparison period" [ngModel]="collectionModel" (focus)="_setRangeType(true)">
+        <mat-input-container [class.active]="!_collSelectingMode" class="active comp">
+          <input matInput placeholder="Comparison period" [ngModel]="comparisonModel" (focus)="_setRangeType()">
         </mat-input-container>
       </td>
       <td>
-        <mat-input-container class="coll" [class.active]="!_collSelectingMode">
-          <input matInput placeholder="Collection period" [ngModel]="comparisonModel" (focus)="_setRangeType()">
+        <mat-input-container class="coll" [class.active]="_collSelectingMode">
+          <input matInput placeholder="Collection period" [ngModel]="collectionModel" (focus)="_setRangeType(true)">
         </mat-input-container>
       </td>
     </tr>

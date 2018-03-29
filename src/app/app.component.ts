@@ -6,8 +6,10 @@ import {ChangeDetectionStrategy, Component} from "@angular/core";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  date1 = new Date('02.15.2018');
-  date2 = new Date('02.12.2018');
+  date1 = new Date('01.12.2018');
+  date2 = new Date('01.15.2018');
+  date3 = new Date('01.16.2018');
+  date4 = new Date('03.15.2018');
 
   constructor() {
   }

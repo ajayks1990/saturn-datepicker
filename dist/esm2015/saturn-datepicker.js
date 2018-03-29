@@ -2865,7 +2865,7 @@ class MatRangepickerInline {
         this._validSelected = null;
         this._beginDateSelected = false;
         this._beginCollDateSelected = false;
-        this._collSelectingMode = true;
+        this._collSelectingMode = false;
         this.comparisonModel = '';
         this.collectionModel = '';
     }
@@ -2922,7 +2922,7 @@ class MatRangepickerInline {
     set beginDate(value) {
         this._validSelected = null;
         this._beginDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-        this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
+        this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
     }
     /**
      * End of dates interval.
@@ -2936,7 +2936,7 @@ class MatRangepickerInline {
     set endDate(value) {
         this._validSelected = null;
         this._endDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-        this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
+        this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
     }
     /**
      * The currently selected date.
@@ -2963,7 +2963,9 @@ class MatRangepickerInline {
     set beginCollDate(value) {
         this._validSelected = null;
         this._beginCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-        this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
+        this.collectionModel = this.prepareFormat(this._beginCollDate, this._endCollDate);
+        this.rightCalendar['startAt'] = this._beginCollDate;
+        this.rightCalendar['_activeDate'] = this._beginCollDate;
     }
     /**
      * End of dates interval.
@@ -2977,7 +2979,7 @@ class MatRangepickerInline {
     set endCollDate(value) {
         this._validSelected = null;
         this._endCollDate = this._getValidDateOrNull(this._dateAdapter.deserialize(value));
-        this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
+        this.collectionModel = this.prepareFormat(this._beginCollDate, this._endCollDate);
     }
     /**
      * @param {?=} mode
@@ -2995,14 +2997,14 @@ class MatRangepickerInline {
         if (this._collSelectingMode) {
             this._selectCollRange(date);
             if (!this._beginCollDateSelected) {
-                this.selectedComparisonChanged.emit({ begin: this._beginCollDate, end: this.endCollDate });
+                this.selectedCollectionChanged.emit({ begin: this._beginDate, end: this._endDate });
                 this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
             }
         }
         else {
             this._selectCompRange(date);
             if (!this._beginDateSelected) {
-                this.selectedCollectionChanged.emit({ begin: this._beginDate, end: this._endDate });
+                this.selectedComparisonChanged.emit({ begin: this._beginCollDate, end: this.endCollDate });
                 this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
             }
         }
@@ -3097,13 +3099,13 @@ MatRangepickerInline.decorators = [
   <table>
     <tr>
       <td>
-        <mat-input-container [class.active]="_collSelectingMode" class="active comp">
-          <input matInput placeholder="Comparison period" [ngModel]="collectionModel" (focus)="_setRangeType(true)">
+        <mat-input-container [class.active]="!_collSelectingMode" class="active comp">
+          <input matInput placeholder="Comparison period" [ngModel]="comparisonModel" (focus)="_setRangeType()">
         </mat-input-container>
       </td>
       <td>
-        <mat-input-container class="coll" [class.active]="!_collSelectingMode">
-          <input matInput placeholder="Collection period" [ngModel]="comparisonModel" (focus)="_setRangeType()">
+        <mat-input-container class="coll" [class.active]="_collSelectingMode">
+          <input matInput placeholder="Collection period" [ngModel]="collectionModel" (focus)="_setRangeType(true)">
         </mat-input-container>
       </td>
     </tr>
@@ -3148,6 +3150,7 @@ MatRangepickerInline.ctorParameters = () => [
     { type: NgZone, },
 ];
 MatRangepickerInline.propDecorators = {
+    "rightCalendar": [{ type: ViewChild, args: ['rightCalendar',] },],
     "startAt": [{ type: Input },],
     "rangeMode": [{ type: Input },],
     "selectedChanged": [{ type: Output },],

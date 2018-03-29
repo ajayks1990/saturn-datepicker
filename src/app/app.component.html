@@ -1,22 +1,6 @@
-<mat-rangepicker-inline [beginCollDate]="date2"
-                        [endCollDate]="date1"
+<mat-rangepicker-inline [beginDate]="date1"
+                        [endDate]="date2"
+                        [beginCollDate]="date3"
+                        [endCollDate]="date4"
                         (selectedCollectionChanged)="test($event, 1)"
                         (selectedComparisonChanged)="test($event, 0)"></mat-rangepicker-inline>
-<br>
-<br>
-<input matInput [matDatepicker]="myDatepicker">
-<mat-datepicker #myDatepicker [rangeMode]="true"></mat-datepicker>
-<br>
-<br>
-<div style="width: 200px;">
-  <mat-calendar></mat-calendar>
-</div>
-<br>
-<br>
-<mat-form-field class="example-full-width">
-  <input matInput [matDatepicker]="picker" placeholder="Choose a date">
-  <mat-datepicker-toggle matSuffix [for]="picker">
-    1
-  </mat-datepicker-toggle>
-  <mat-datepicker #picker [rangeMode]="true"></mat-datepicker>
-</mat-form-field>
