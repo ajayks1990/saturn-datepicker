@@ -131,17 +131,17 @@ export class MatRangepickerInline<D> {
 
   /** Selects the given date range */
   _selectRange(date: D): void {
-    if (this._collSelectingMode) {
-      this._selectCollRange(date);
-      if (!this._beginCollDateSelected) {
-        this.selectedCollectionChanged.emit({begin: this._beginDate, end: this._endDate});
-        this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
-      }
-    } else {
+    if (!this._collSelectingMode) {
       this._selectCompRange(date);
       if (!this._beginDateSelected) {
-        this.selectedComparisonChanged.emit({begin: this._beginCollDate, end: this.endCollDate});
+        this.selectedComparisonChanged.emit({begin: this._beginDate, end: this._endDate});
         this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
+      }
+    } else {
+      this._selectCollRange(date);
+      if (!this._beginCollDateSelected) {
+        this.selectedCollectionChanged.emit({begin: this._beginCollDate, end: this.endCollDate});
+        this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
       }
     }
     this.selectedChanged.emit({begin: this._beginDate, end: this._endDate});
