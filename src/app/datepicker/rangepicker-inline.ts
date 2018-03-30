@@ -116,7 +116,7 @@ export class MatRangepickerInline<D> {
 
   _beginDateSelected = false;
   _beginCollDateSelected = false;
-  _collSelectingMode = false;
+  _collSelectingMode = true;
 
   constructor(@Optional() private _dateAdapter: DateAdapter<D>,
               @Optional() @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats,
