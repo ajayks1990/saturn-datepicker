@@ -133,16 +133,16 @@ export class MatRangepickerInline<D> {
   _selectRange(date: D): void {
     if (!this._collSelectingMode) {
       this._selectCompRange(date);
-      if (!this._beginDateSelected) {
+      // if (!this._beginDateSelected) {
         this.selectedComparisonChanged.emit({begin: this._beginDate, end: this._endDate});
         this.comparisonModel = this.prepareFormat(this._beginDate, this._endDate);
-      }
+      // }
     } else {
       this._selectCollRange(date);
-      if (!this._beginCollDateSelected) {
+      // if (!this._beginCollDateSelected) {
         this.selectedCollectionChanged.emit({begin: this._beginCollDate, end: this.endCollDate});
         this.collectionModel = this.prepareFormat(this._beginCollDate, this.endCollDate);
-      }
+      // }
     }
     this.selectedChanged.emit({begin: this._beginDate, end: this._endDate});
   }
@@ -157,8 +157,8 @@ export class MatRangepickerInline<D> {
   }
 
   private _selectCompRange(date: D): void {
-    if (!this._dateAdapter.sameDate(this.beginDate, date) ||
-      !this._dateAdapter.sameDate(this.endDate, date)) {
+    // if (!this._dateAdapter.sameDate(this.beginDate, date) ||
+    //   !this._dateAdapter.sameDate(this.endDate, date)) {
       if (!this._beginDateSelected) {
         this._beginDateSelected = true;
         this._setCompDateRange({begin: date, end: date});
@@ -170,12 +170,12 @@ export class MatRangepickerInline<D> {
           this._setCompDateRange({begin: date, end: <D>this.beginDate});
         }
       }
-    }
+    // }
   }
 
   private _selectCollRange(date: D): void {
-    if (!this._dateAdapter.sameDate(this.beginCollDate, date) ||
-      !this._dateAdapter.sameDate(this.endCollDate, date)) {
+    // if (!this._dateAdapter.sameDate(this.beginCollDate, date) ||
+    //   !this._dateAdapter.sameDate(this.endCollDate, date)) {
       if (!this._beginCollDateSelected) {
         this._beginCollDateSelected = true;
         this._setCollDateRange({begin: date, end: date});
@@ -187,7 +187,7 @@ export class MatRangepickerInline<D> {
           this._setCollDateRange({begin: date, end: <D>this.beginCollDate});
         }
       }
-    }
+    // }
   }
 
   private _setCompDateRange(dates: { begin: D, end: D }) {
