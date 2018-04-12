@@ -17,7 +17,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MatDateFormats} from "@angular/material/c
   selector: 'mat-rangepicker-inline',
   exportAs: 'mat-rangepicker-inline',
   templateUrl: './rangepicker-inline.html',
-  styleUrls: ['./rangepicker-inline.css', './rangepicker.inline.css'],
+  styleUrls: ['./rangepicker-inline.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class MatRangepickerInline<D> {

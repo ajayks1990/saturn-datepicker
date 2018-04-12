@@ -1,6 +1,8 @@
 # double-saturn-datepicker
 Fork and modify Saturn datepicker.
 Double calendar with double daterange.
+
+![example screen](./img/screen1.png "example screen")
 ## install
 ```
 npm i double-saturn-datepicker --save
